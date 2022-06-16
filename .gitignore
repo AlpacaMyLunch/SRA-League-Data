@@ -1,0 +1,4 @@
+**/data/drivers/
+**/data/sessions/
+**/__pycache__/
+**/classes/__pycache__/
