@@ -3,12 +3,13 @@ import time
 
 from bs4 import BeautifulSoup
 from classes.print_utilities import colored
-from classes.data_utilities import load_session, parse_session_list, parse_session_json
+from classes.data_utilities import load_session, parse_session_list, parse_session_json, json_from_file
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
 BASE_URL = 'https://simracingalliance.emperorservers.com'
 BASE_URL_DIV_3 = 'https://accsm.simracingalliance.com'
 
+CONFIG_DATA = json_from_file('./config/config.json')
 
 def get_session_details(href: str) -> dict:
     
@@ -101,7 +102,7 @@ def get_session_list(page: int=0) -> list:
 
 def post_leaderboard(payload: dict):
 
-    url = 'https://www.simracingalliance.com/api/leaderboard/update'
+    url = CONFIG_DATA['leaderboard_post_url']
     header = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

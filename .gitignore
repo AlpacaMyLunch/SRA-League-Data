@@ -2,3 +2,4 @@
 **/data/sessions/
 **/__pycache__/
 **/classes/__pycache__/
+**/config/config.json
