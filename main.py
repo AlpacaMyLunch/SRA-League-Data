@@ -303,6 +303,9 @@ def main():
             else:
                 car_specific = ''
 
+            if 'top' in args:
+                result_limit = int(args['top'])
+            
             if 'type' in args:
                 session_type = args['type']
             else:
@@ -319,14 +322,13 @@ def main():
                         print(colored('WILL ***NOT*** POST TO ONLINE LEADERBOARD', 'red'))
 
 
+
             result_limit = 999
             highlight_names = []
             wet = False
             sort_on_average_time = False
             for arg in args['generic']:
-                if arg.isnumeric():
-                    result_limit = int(arg)
-                elif arg == 'wet':
+                if arg == 'wet':
                     wet = True
                 elif arg == 'avg':
                     sort_on_average_time = True
