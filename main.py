@@ -91,16 +91,16 @@ def main():
             car = ''
             wet = False
             type = ''
-            for arg in args.split(' '):
-                if arg[:6] == 'track:':
-                    track = arg[6:]
-                elif arg[:4] == 'car:':
-                    car = arg[4:]
-                elif arg == 'wet':
-                    wet = True
-                elif arg[:5] == 'type:':
-                    type = arg[5:]
 
+            args = parse_arguments(args)
+            if 'track' in args:
+                track = args['track']
+            if 'car' in args:
+                car = args['car']
+            if 'type' in args:
+                type = args['type']
+            if 'wet' in args['generic']:
+                wet = True
 
             self.selected_driver.session_summary(track=track, car=car, type=type, wet=wet)
             
