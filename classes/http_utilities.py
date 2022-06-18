@@ -105,7 +105,8 @@ def post_leaderboard(payload: dict):
     url = CONFIG_DATA['leaderboard_post_url']
     header = {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {CONFIG_DATA["api_key"]}'
     }
     req = requests.post(url, json=payload, headers=header)
     return req.status_code
