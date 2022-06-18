@@ -278,6 +278,7 @@ def main():
             output = []
 
             post_msgs = []
+            result_limit = 999
 
             args = parse_arguments(args)
 
@@ -323,7 +324,7 @@ def main():
 
 
 
-            result_limit = 999
+            
             highlight_names = []
             wet = False
             sort_on_average_time = False
