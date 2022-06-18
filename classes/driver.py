@@ -273,6 +273,33 @@ class Driver:
         return output
 
 
+
+    def laps_per_day(self):
+        """
+        Returns how many laps the driver completed each day.
+        Sorted from most laps -> least laps
+        """
+
+        output = {}
+
+        for session in self.sessions:
+            day = session.date[:10]
+            if day not in output:
+                output[day] = 0
+
+            output[day]+= len(session.laps)
+
+
+        output = dict(
+            sorted(
+                output.items(), key=lambda item: item[1], reverse=True
+            )
+        )
+        return output
+        
+
+            
+
     def save(self):
         save_driver(self)
 

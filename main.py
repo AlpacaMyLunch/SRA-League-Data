@@ -46,6 +46,40 @@ def main():
 
 
 
+        def do_laps_per_day(self, args):
+
+
+
+            if self.selected_driver:
+
+                lpd = self.selected_driver.laps_per_day()
+                first_item = list(lpd.keys())[0]
+                print(f'{colored(lpd[first_item], "blue")} laps on {first_item}')
+
+
+            else:
+
+                tracker = []
+                for driver in drivers:
+                    lpd = driver.laps_per_day()
+                    date = list(lpd.keys())[0]
+                    laps = lpd[date]
+
+                    tracker.append({
+                        'driver': driver,
+                        'laps': laps,
+                        'date': date
+                    })
+
+                tracker = sort_array_of_dicts(tracker, 'laps')
+
+                msg_output = []
+                for driver in tracker:
+                    msg_output.append(
+                        f"{driver['driver'].name}\n{driver['laps']} on {driver['date']}\n"
+                    )
+
+                print_side_by_side(msg_output, line_len=35)
 
         def do_sessions(self, args):
             
