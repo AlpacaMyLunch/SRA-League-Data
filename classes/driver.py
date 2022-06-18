@@ -1,5 +1,6 @@
 
 from classes.session import Session
+from classes.lap import Lap 
 from classes.data_utilities import json_to_file, milliseconds_to_seconds, save_driver, sort_array_of_dicts
 from classes.time_utilities import seconds_to_pretty_time, categorize_laptime
 from classes.print_utilities import print_side_by_side, rank_to_color, colored
@@ -92,7 +93,10 @@ class Driver:
 
             best_lap_seconds = None
             if 'best lap' in session.analysis:
-                best_lap_seconds = session.analysis['best lap'].seconds
+                try:
+                    best_lap_seconds = session.analysis['best lap'].seconds
+                except:
+                    pass
 
             
             msg = f"{msg}Best: {seconds_to_pretty_time(best_lap_seconds)}, Average: {seconds_to_pretty_time(session.analysis['average']['time'])}\n\n"
@@ -295,6 +299,7 @@ class Driver:
                 output.items(), key=lambda item: item[1], reverse=True
             )
         )
+
         return output
         
 

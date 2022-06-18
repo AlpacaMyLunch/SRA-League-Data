@@ -48,7 +48,8 @@ def main():
 
         def do_laps_per_day(self, args):
 
-
+            args = parse_arguments(args)
+            
 
             if self.selected_driver:
 
