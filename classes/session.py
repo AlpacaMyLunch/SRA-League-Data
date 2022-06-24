@@ -2,7 +2,7 @@ from classes.sector import Sector
 from classes.lap import Lap
 from classes.print_utilities import print_side_by_side
 
-from classes.time_utilities import average_time, milliseconds_to_seconds, categorize_laptime, min_max
+from classes.time_utilities import average_time, milliseconds_to_seconds, categorize_laptime, min_max, compare_times
 
 
 
@@ -46,6 +46,14 @@ class Session:
 
         # add laps
         self.laps = []
+
+        # Holds valid lap sectors so I can grab an average
+        sectors = {
+            1: [],
+            2: [],
+            3: []
+        }
+
         for lap_data in data['laps']:
             new_lap = Lap(1 + len(self.laps))
             for sect in range(1, 4):
@@ -67,6 +75,12 @@ class Session:
 
             self.laps.append(new_lap)
 
+            if new_lap.valid:
+                if new_lap.number > 1:
+                    for s in [1, 2, 3]:
+                        sectors[s].append(new_lap.sectors[s-1].seconds)
+                    
+
         
         
 
@@ -81,6 +95,12 @@ class Session:
                 elif lap.seconds < best_lap.seconds:
                     best_lap = lap
 
+        for s in [1, 2, 3]:
+            self.analysis[f'average sector {s}'] = average_time(sectors[s])
+            mm = min_max(sectors[s])
+            self.analysis[f'+/- sector {s}'] = abs(compare_times(mm['min'], mm['max']))
+            
+        
             
         
         self.analysis['best lap'] = best_lap
@@ -106,6 +126,7 @@ class Session:
             'number': self.number,
             'analysis': {},
             'penalties': self.penalties,
+            'finish': self.finish,
             'laps': []
         }
 
@@ -136,19 +157,22 @@ def find_average_time(laps: list, sliding_window_size: int = 5):
 
 
 
-    for i in range(1, len(laps)):#, sliding_window_size):
+    for i in range(1, len(laps)):
+
         evaluate_laps = laps[i:i+sliding_window_size]
 
-        # Are all of them valid?
-
+        # Make sure we have [ sliding_window_size ] laps
         if len(evaluate_laps) == sliding_window_size:
+
             all_valid = True
             for lap in evaluate_laps:
+                # Verify that all of the collected laps are valid
                 if not lap.valid:
                     all_valid = False
                     break
 
             if all_valid:
+                # All of the laps are valid, let's grab the average
                 time_list = []
                 for lap in evaluate_laps:
                     time_list.append(lap.seconds)

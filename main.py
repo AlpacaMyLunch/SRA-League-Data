@@ -103,7 +103,7 @@ def main():
             if 'wet' in args['generic']:
                 wet = True
 
-            self.selected_driver.session_summary(track=track, car=car, type=type, wet=wet)
+            self.selected_driver.sessions_summary(track=track, car=car, type=type, wet=wet)
             
 
         def do_select(self, args):
@@ -497,8 +497,63 @@ def main():
             print_side_by_side(output)
 
                 
+        def do_compare(self, args):
+            if not self.selected_driver:
+                print('No driver selected.  Select a driver and provide session id\ncompare session:220615_225858_R')
+                return
+
+            args = parse_arguments(args)
+
+            if 'session' not in args:
+                print('Must include session ID.')
+                return
+
+            session_id = args['session']
+
+            driver_session = self.selected_driver.session_summary(session_id)
+            ds = driver_session['analysis']
+            ds['driver'] = self.selected_driver
+            ds['finish'] = driver_session['finish']
+
+            participants = [ds]
+            for driver in drivers:
+                if driver != self.selected_driver:
+                    sesh = driver.session_summary(session_id)
+                    if sesh:
+                        output = sesh['analysis']
+                        output['driver'] = driver
+                        output['finish'] = sesh['finish']
+                        participants.append(output)
 
 
+            participants = sort_array_of_dicts(participants, 'finish', reverse=False)
+            msg_output = []
+            for driver in participants:
+                msg = f'P{driver["finish"]} {colored(driver["driver"].name, "blue")}\n'
+                try:
+                    msg = f'{msg}Best Lap Time: {driver["best lap"]["time"]}\n'
+                except:
+                    msg = f'{msg}Best Lap Time: N/A\n'
+                msg = f'{msg}AVERAGE\n'
+                for s in [1, 2, 3]:
+                    msg = f'{msg}Sector {s}: {seconds_to_pretty_time(driver[f"average sector {s}"])} (+/- {driver[f"+/- sector {s}"]})\n'
+
+                msg_output.append(msg)
+
+
+            print_side_by_side(msg_output, line_len=50)
+
+                
+
+
+
+
+
+            
+            
+
+            
+            
 
     terminal = Terminal(Cmd)
     terminal.cmdloop()

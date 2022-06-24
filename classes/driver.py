@@ -66,7 +66,9 @@ class Driver:
                     self.poles += 1
             self.sessions.append(new_session)
 
-    def session_summary(self, track: str='', wet: bool=False, car: str='', type: str=''):
+
+
+    def sessions_summary(self, track: str='', wet: bool=False, car: str='', type: str=''):
         """
         Print a summary of the driver's sessions.
         Able to specify a track, car, session type or wet conditions.
@@ -218,6 +220,9 @@ class Driver:
         print('\n\n')
 
 
+
+
+
     def track_summary(self, track: str, type: str='', wet: bool=False, car: str=''):
         """
         Dict containing a summary of this driver's performance at a specific track.
@@ -302,6 +307,22 @@ class Driver:
 
         return output
         
+
+    def session_summary(self, session_id: str=''):
+
+
+        session = None
+        for s in self.sessions:
+            if s.id == session_id:
+                session = s
+                break
+
+        if session == None:
+            return None
+
+        return session.json()
+
+
 
             
 
